@@ -2,7 +2,7 @@ import { useEffect } from "react";
 
 function About() {
   useEffect(() => {
-    document.title = 'CodeQuest | About Us';
+    document.title = 'CoddeQuest | About Us';
   }, []);
 
   return (

@@ -4,6 +4,7 @@ import Problems from './pages/Problems';
 import Navbar from './components/Navbar';
 import About from './pages/About';
 import Authentication from './pages/Authentication';
+import NotFound from './pages/NotFound';
 
 export default function App() {
     return (
@@ -15,6 +16,7 @@ export default function App() {
           <Route path="/problems" element={<Problems/>} />
           <Route path="/about" element={<About />} />
           <Route path="/authentication" element={<Authentication />} />
+          <Route path="/*" element={<NotFound />} />
         </Routes>
       </div>
     </Router>

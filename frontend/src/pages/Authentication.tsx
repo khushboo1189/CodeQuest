@@ -2,7 +2,7 @@ import { useEffect } from "react";
 
 function Authentication() {
   useEffect(() => {
-    document.title = 'CodeQuest | Authentication';
+    document.title = 'CoddeQuest | Authentication';
   }, []);
 
   return (
