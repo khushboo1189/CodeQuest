@@ -2,9 +2,11 @@ import "../styles/Navbar.css"
 import NavLinks from "./NavLinks"
 import Logo from "../assets/Logo.jpg"
 import { useEffect, useState } from "react";
+import FirebaseInit from "../firebase/FirebaseInit";
 
 function Navbar() {
     const [isSticky, setSticky] = useState(false);
+    const [LoggedInUser, setUser] = useState(false);
 
     const checkScrollTop = () => {
         setSticky(window.scrollY > 130);
@@ -14,6 +16,13 @@ function Navbar() {
         window.addEventListener('scroll', checkScrollTop);
         return () => window.removeEventListener('scroll', checkScrollTop);
     }, []);
+
+    useState(() => {
+        console.log("User: " + FirebaseInit.user);
+        if (FirebaseInit.isLoggedIn()) {
+            setUser(true);
+        }
+    });
 
     const menu = [
         {
@@ -48,7 +57,7 @@ function Navbar() {
                     ))}
                 </div>
                 <div className="auth-btn flex-none h-full flex justify-center items-center sm:hidden">
-                    <a href="/authentication">Sign Up</a>
+                    {LoggedInUser ? <a href="/dashboard">Dashboard</a> : <a href="/authentication">Sign Up</a>}
                 </div>
             </div>
         </div>

@@ -1,8 +1,9 @@
 import json
 import pyrebase
+import datetime
 
 class Problem:
-    def __init__(self, id, short_name, type, difficulty, time, language, score, status, description, input_format, output_format, output, input):
+    def __init__(self, id = None, short_name = None, type = None, difficulty = None, time = None, language = None, score = None, status = None, description = None, input_format = None, output_format = None, output = None, input = None):
         self.id = id
         self.short_name = short_name
         self.type = type
@@ -16,18 +17,30 @@ class Problem:
         self.output_format = output_format
         self.output = output
         self.input = input
+        self.created_on = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         self.db = self.init_db()
     
     def prints(self):
         """ Print the problem details """
-        print("ID: " + self.id + "\nShort Name: " + self.short_name + "\nType: " + self.type + "\nDifficulty: " + self.difficulty + "\nTime: " + self.time + "\nLanguage: " + self.language + "\nScore: " + self.score + "\nStatus: " + self.status + "\nDescription: " + self.description + "\nInput Format: " + self.input_format + "\nOutput Format: " + self.output_format + "\nOutput: " + self.output + "\nInput: " + self.input + "\n")
+        print(f"ID: {self.id}\n"
+        f"Short Name: {self.short_name}\n"
+        f"Type: {self.type}\n"
+        f"Difficulty: {self.difficulty}\n"
+        f"Time: {self.time}\n"
+        f"Language: {self.language}\n"
+        f"Score: {self.score}\n"
+        f"Status: {self.status}\n"
+        f"Description: {self.description}\n"
+        f"Input Format: {self.input_format}\n"
+        f"Output Format: {self.output_format}\n"
+        f"Output: {self.output}\n"
+        f"Input: {self.input}\n"
+        f"Created On: {self.created_on}\n")
         
     def clean(self):
         """ Clean the problem details """
         if self.id in ["", None]:
             return "Problem ID is empty", self
-        else: 
-            self.id = self.id.title()
         if self.short_name in ["", None]:
             return "Problem short name is empty", self
         else: 
@@ -57,18 +70,22 @@ class Problem:
         return self
     
     def check_last_num(self):
-        db_val = self.db.child("problems").get().val()
-        if db_val:
-            problems = [int(no[3:]) for no in db_val.keys()]
-            next_num = max(problems) + 1
-            return str(next_num)
-        else:
+        db_val = self.db.child('problems').get().val()  # Retrieve the database value using the get() method
+        print("db_val:", db_val)  # Print the value of db_val for debugging
+        if db_val is None:
             return "1"
         
+        problems = [int(no[3:]) for no in db_val.keys()]
+        print("problems:", problems)  # Print the value of problems for debugging
+        next_num = max(problems) + 1
+        print("next_num:", next_num)  # Print the value of next_num for debugging
+        return str(next_num)
+        
     def init_db(self):
-        with open("backend/config.json") as f:
+        with open("creds.json") as f:
             config = json.load(f)
         db = pyrebase.initialize_app(config).database()
+        self.db = db.child("problems").set({})
         return db
     
     def to_dict(self):
@@ -92,15 +109,20 @@ class Problem:
     def upload(self):
         """ Upload the problem details to firebase """
         temp_no = self.check_last_num()
+        print("Uploading Problem " + temp_no + "...")
         self.db.child("problems").child("pb-" + temp_no).set(self.to_dict())
         print("Uploaded Successfully\n")
         
     def upload_all(self):
         """ Upload all the problems to firebase """
-        self.db.child("problems").set({})
         data = json.load(open('./input/data.json'))
         for problems in data:
             pb = Problem(data[problems]["id"], data[problems]["short_name"], data[problems]["type"], data[problems]["difficulty"], data[problems]["time"], data[problems]["language"], data[problems]["score"], data[problems]["status"], data[problems]["description"], data[problems]["input_format"], data[problems]["output_format"], data[problems]["output"], data[problems]["input"])
             pb.clean()
             pb.prints()
             pb.upload()
+            
+if __name__ == "__main__":
+    pb = Problem()
+    pb.upload_all()
+    
