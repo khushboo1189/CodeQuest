@@ -9,14 +9,19 @@ function Authentication() {
 
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
-	const [LoggedIn, setLoggedIn] = useState(FirebaseInit.isLoggedIn() ? 'true' : 'false');
+	const [LoggedIn, setLoggedIn] = useState(Boolean(FirebaseInit.isLoggedIn()).toString());
+	useEffect(() => {
+		setLoggedIn(Boolean(FirebaseInit.isLoggedIn()).toString());
+	}, [LoggedIn]);
 
 	const handleLogin = () => {
-		// Handle login and make sure to add it to global FirebaseInit object after user login
 		if (email !== '' && password !== '') {
-			if (LoggedIn !== 'true') {
-				FirebaseInit.loginUser(email, password);
-				setLoggedIn(FirebaseInit.isLoggedIn() ? 'true' : 'false');
+			if (LoggedIn) {
+				FirebaseInit.loginUser(email, password).then(() => {
+					setLoggedIn(Boolean(FirebaseInit.isLoggedIn()).toString());
+				}, (error) => {
+					console.error('An error occurred during sign in:', error);
+				});
 			} else {
 				alert('User is already logged in');
 			}
