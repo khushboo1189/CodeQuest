@@ -67,7 +67,7 @@ if __name__ == "__main__":
     db = firebase.database()
     db.child("problems").set({})
 
-    data = json.load(open('./input/data.json'))
+    data = json.load(open('./input/data copy.json'))
     for problems in data:
         pb = problem(data[problems]["name"], data[problems]["type"], data[problems]["time"], data[problems]["language"], data[problems]["score"], data[problems]["status"])
         pb.clean()

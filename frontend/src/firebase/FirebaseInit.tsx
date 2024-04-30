@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, browserSessionPersistence, setPersistence, onAuthStateChanged, updateProfile } from "firebase/auth";
-import { getDatabase, ref, set } from "firebase/database";
+import { getDatabase, onValue, ref, set } from "firebase/database";
 
 const firebaseConfig = {
     apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -74,8 +74,13 @@ class Firebase {
         }
     }
 
-    isLoggedIn() {
-        return !!this.user;
+    init_db() {
+        const starCountRef = ref(this.db, '/problems');
+        onValue(starCountRef, (snapshot) => {
+            const data = snapshot.val();
+            console.log(data);
+        });
+        return this.db;
     }
 }
 

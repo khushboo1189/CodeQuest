@@ -1,27 +1,37 @@
-interface ValuesProps {
-    key: number;
-    problem_no: number;
-    problem_name: string;
-    problem_type: string;
-    problem_time: string;
-    problem_language?: string;
-    problem_score?: string;
-    problem_status?: string;
-    problem_link?: string;
+interface Problem {
+    id: number;
+    description: string;
+    difficulty: string;
+    input: string;
+    input_format: string;
+    language: string;
+    output: string;
+    output_format: string;
+    score: number;
+    short_name: string;
+    status: string;
+    time: number;
+    type: string;
+    link: string;    
 }
 
-function Values({problem_no, problem_name, problem_type = "Not Mentioned", problem_time = "Not Mentioned", problem_language = "Any", problem_score = "0", problem_status = "Not Completed!", problem_link = "/problems"}: ValuesProps) {
+interface ValuesProps {
+    key: string;
+    problem: Problem;
+}
+
+function Values({ id, short_name, type, time, language, score, status, link }: Problem) {
     return (
         <div className="values flex">
-            <p className="problem_no">{problem_no}</p>
-            <a className="problem_name" href={problem_link}>{problem_name}</a>
-            <p className="problem_type">{problem_type}</p>
-            <p className="problem_time">{problem_time}</p>
-            <p className="problem_language">{problem_language}</p>
-            <p className="problem_score">{problem_score}</p>
-            <p className="problem_status">{problem_status}</p>
+            <p className="problem_no">{id}</p>
+            <a className="problem_name" href={`/problem/${link}`}>{short_name}</a>
+            <p className="problem_type">{type}</p>
+            <p className="problem_time">{time}</p>
+            <p className="problem_language">{language}</p>
+            <p className="problem_score">{score}</p>
+            <p className="problem_status">{status}</p>
         </div>
-    )
+    );
 }
 
 export default Values;

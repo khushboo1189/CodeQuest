@@ -4,3 +4,9 @@ div.cm-line {
     font-family: 'Courier New', Courier, monospace;
     font-size: 18px;
 }
+
+.ͼo .cm-gutters {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 18px;
+    border: 1px solid #000;
+}

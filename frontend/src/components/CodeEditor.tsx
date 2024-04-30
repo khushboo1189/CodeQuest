@@ -9,12 +9,17 @@ function CodeEditor() {
                     <a className="run">Run</a>
                     <a className="submit">Submit</a>
                 </div>
-                <div className="boxes flex-auto flex flex-col h-full w-full gap-14 max-h-[calc(100vh-130px)]">
-                    <div className="coding-box flex-auto w-full h-full">
+                <div className="boxes flex-auto flex flex-col h-full w-full gap-[75px] max-h-full">
+                    <div className="coding-box flex-auto w-full h-full justify-center items-center">
                         <CodingTextArea />
                     </div>
-                    <div className="box output flex-1 w-full h-full">
-                        hey
+                    <div className="box output flex-none w-full h-full justify-center items-center bg-black text-white">
+                        <div className="output-title">Output:</div>
+                        <div className="output-content">
+                            <div className="output-text">Output will be displayed here</div>
+                            <div className="output-text">.</div>
+                            <div className="output-text">.</div>
+                        </div>
                     </div>
                 </div>
             </div>

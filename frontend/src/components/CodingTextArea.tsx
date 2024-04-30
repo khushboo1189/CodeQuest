@@ -1,5 +1,5 @@
 // import { historyField } from '@codemirror/commands';
-import CodeMirror from '@uiw/react-codemirror';
+import CodeMirror, { oneDark } from '@uiw/react-codemirror';
 import { python } from '@codemirror/lang-python';
 import "../styles/CodingTextArea.css";
 
@@ -9,7 +9,7 @@ import "../styles/CodingTextArea.css";
 function CodingTextArea() {
 
 	return (
-		<CodeMirror value={python.toString()} height='50vh'  extensions={[python()]} />
+		<CodeMirror value={python.toString()} height='50vh'  extensions={[python()]} theme={oneDark} />
 	);
 
 

@@ -85,7 +85,7 @@ class Problem:
         with open("creds.json") as f:
             config = json.load(f)
         db = pyrebase.initialize_app(config).database()
-        self.db = db.child("problems").set({})
+        self.db = db
         return db
     
     def to_dict(self):
