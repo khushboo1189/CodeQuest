@@ -34,7 +34,7 @@ function Navbar() {
         },
         {
             index: 2,
-            href: "/problems",
+            href: "/problem",
             name: "Problems"
         },
         {

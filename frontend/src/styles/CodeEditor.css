@@ -1,0 +1,50 @@
+.code-editor {
+    border: solid 2px #000;
+    padding: 20px;
+}
+
+.code-editor .action-btn {
+    margin-bottom: 20px;
+    gap: 40px;
+}
+
+.code-editor .action-btn a {
+    padding: 10px 30px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 18px;
+    border-radius: 20px;
+}
+
+.code-editor .action-btn .run {
+    background-color: #4CAF50;
+    color: #fff;
+    border: none;
+}
+
+.code-editor .action-btn .run:hover {
+    background-color: #45a049;
+}
+
+.code-editor .action-btn .submit {
+    background-color: #008CBA;
+    color: #fff;
+    border: none;
+}
+
+.code-editor .action-btn .submit:hover {
+    background-color: #007a9b;
+}
+
+.code-editor .box {
+    border: #000 solid 5px;
+    resize: none;
+}
+
+.code-editor .coding {
+    padding: 10px;
+}
+
+.code-editor .output {
+    padding: 20px;
+}
