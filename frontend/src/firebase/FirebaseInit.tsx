@@ -29,7 +29,6 @@ class Firebase {
         // Listen for auth state changes
         onAuthStateChanged(this.auth, user => {
             this.user = user;
-            console.log('Init User:', this.user);
         });
     }
 
@@ -55,12 +54,27 @@ class Firebase {
             await setPersistence(this.auth, browserSessionPersistence);
             await signInWithEmailAndPassword(this.auth, email, password);
         } catch (error) {
-            console.error('An error occurred during sign in:', error);
+            let error_message = (error as any).message;
+            let errorCode = error_message.split("(")[1]?.split(")")[0];
+            if (errorCode === 'auth/invalid-email') {
+                alert('Invalid email');
+            }
+            else if (errorCode === 'auth/user-not-found') {
+                alert('User not found');
+            } else if (errorCode === 'auth/wrong-password' || errorCode === 'auth/invalid-password') {
+                alert('Wrong password');
+            } else if (errorCode === 'auth/invalid-credential') {
+                alert(`Invalid credentials! \n${error_message}`);
+            } else if (errorCode === 'auth/too-many-requests') {
+                alert(`Too many requests: You need to reset your password to login again! \n ${error_message}`);
+            } else {
+                // Generic error handler
+                console.error('An error occurred during sign in:', error);
+            }
         }
     }
 
     isLoggedIn() {
-        console.log('Check Login:', this.user);
         return !!this.user;
     }
 }

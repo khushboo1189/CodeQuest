@@ -1,9 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
 
 .container-box {
+    margin-top: 100px;
     border: 4px solid #000;
     border-radius: 15px;
-    padding: 50px 100px 150px 100px;
+    padding: 50px 100px 100px 100px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 1);
     font-family: 'DM Sans', sans-serif;
 }

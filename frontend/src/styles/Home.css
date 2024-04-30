@@ -18,3 +18,32 @@
 h1 {
     font-family: 'Oswald', sans-serif;
 }
+
+.found {
+    font-family: 'Oswald', sans-serif;
+    font-size: 1.5em;
+    color: #000;
+    margin-top: 1em;
+}
+
+.found a {
+    color: #000;
+    text-decoration: none;
+}
+
+.found a::after {
+    content: '';
+    width: 0;
+    height: 3px;
+    display: block;
+    background: #000;
+    transition: width .6s;
+}
+
+.found a:hover {
+    color: #000;
+}
+
+.found a:hover::after {
+    width: 100%;
+}
