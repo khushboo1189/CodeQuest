@@ -1,7 +1,7 @@
 import "../styles/CodeEditor.css"
 import CodingTextArea from "./CodingTextArea";
 
-function CodeEditor() {
+function CodeEditor({ input }: { input: String }) {
     return (
         <div className="h-full w-full max-h-full">
             <div className="code-editor flex flex-col h-full w-full max-h-full">
@@ -11,7 +11,7 @@ function CodeEditor() {
                 </div>
                 <div className="boxes flex-auto flex flex-col h-full w-full gap-[75px] max-h-full">
                     <div className="coding-box flex-auto w-full h-full justify-center items-center">
-                        <CodingTextArea />
+                        <CodingTextArea input_field={String(input)} />
                     </div>
                     <div className="box output flex-none w-full h-full justify-center items-center bg-black text-white">
                         <div className="output-title">Output:</div>

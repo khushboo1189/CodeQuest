@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, browserSessionPersistence, setPersistence, onAuthStateChanged, updateProfile } from "firebase/auth";
-import { getDatabase, onValue, ref, set } from "firebase/database";
+import { get, getDatabase, ref, set } from "firebase/database";
 
 const firebaseConfig = {
     apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -74,14 +74,23 @@ class Firebase {
         }
     }
 
-    init_db() {
-        const starCountRef = ref(this.db, '/problems');
-        onValue(starCountRef, (snapshot) => {
+    async getProblems() {
+        try {
+          const dbRef = ref(this.db, 'problems');
+          const snapshot = await get(dbRef);
+          if (snapshot.exists()) {
             const data = snapshot.val();
-            console.log(data);
-        });
-        return this.db;
-    }
+            return data;
+          } else {
+            console.log("No data available");
+            return null;
+          }
+        } catch (error) {
+          console.error(error);
+          throw error; // Rethrow the error to handle it in the caller
+        }
+      }
+      
 }
 
 const FirebaseInit = new Firebase();

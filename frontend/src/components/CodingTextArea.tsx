@@ -6,10 +6,10 @@ import "../styles/CodingTextArea.css";
 // const stateFields = { history: historyField };
 
 
-function CodingTextArea() {
+function CodingTextArea(input_field:{input_field: String}) {
 
 	return (
-		<CodeMirror value={python.toString()} height='50vh'  extensions={[python()]} theme={oneDark} />
+		<CodeMirror value={input_field.input_field.toString()} height='50vh'  extensions={[python()]} theme={oneDark} />
 	);
 
 

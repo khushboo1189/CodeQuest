@@ -1,16 +1,30 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import '../styles/Problems.css';
-import Values from "../components/Values";
 import FirebaseInit from "../firebase/FirebaseInit";
+import Values from "../components/Values";
 
 function Problems() {
-	let questions: number = 9;
+	const [problems, setProblems] = useState(Object); // Initialize state with null
+	let questions = problems ? Object.keys(problems).length : 0;
+
+    useEffect(() => {
+		const fetchProblems = async () => {
+			try {
+				const data = await FirebaseInit.getProblems();
+				if (data) {
+					setProblems(data);
+				}
+			} catch (error) {
+				console.error('Error fetching data:', error);
+			}
+		};
+
+		fetchProblems();
+	}, []);
 
 	useEffect(() => {
 		document.title = 'CoddeQuest | Problems';
 	}, []);
-
-	const db = FirebaseInit.init_db();
 
 	return (
 		<div className="w-full h-auto">
@@ -33,7 +47,6 @@ function Problems() {
 				<div className="card flex-1">
 					<p className="">Total Number of Attempted: {questions}</p>
 				</div>
-				<div className="card flex-1">HI</div>
 			</div>
 			<div className="question-holder">
 				<div className="question-box w-full">
@@ -44,30 +57,26 @@ function Problems() {
 							<p className="problem_no">No.</p>
 							<p className="problem_name">Name</p>
 							<p className="problem_type">Type</p>
+							<p className="problem_difficulty">Difficulty</p>
 							<p className="problem_time">Time</p>
 							<p className="problem_language">Language</p>
 							<p className="problem_score">Score</p>
 							<p className="problem_status">Status</p>
 						</div>
-						{Object.entries(db).map(([key, problem]: [string, any]) => (
-							<Values
-								key={(key.toString())} // Convert the problem ID from string to number
-								id={problem.id}
-								short_name={problem.short_name}
-								type={problem.type}
-								time={problem.time}
-								language={problem.language}
-								score={problem.score}
-								status={problem.status}
-								link={`/problem/${problem.id}`} 
-								description={""}
-								difficulty={problem.difficulty}
-								input={problem.input}
-								input_format={problem.input_format}
-								output={problem.output}
-								output_format={problem.output_format}
-							/>
-						))}
+						{problems ? (
+							Object.keys(problems).map((key) => (
+								<Values key={key} problem={problems[key]} />
+							))
+						) : (
+							<div>Loading...</div>
+						)}
+						{!problems ? (
+							<div>Loading...</div>
+						) : Object.keys(problems).length === 0 ? (
+							<div className="text-2xl h-[100px] w-full flex  justify-center items-center">
+								<p>No Questions Available!</p>
+							</div>
+						) : null}
 					</div>
 				</div>
 			</div>

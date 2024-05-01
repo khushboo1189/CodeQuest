@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 interface Problem {
     id: number;
     description: string;
@@ -12,26 +14,28 @@ interface Problem {
     status: string;
     time: number;
     type: string;
-    link: string;    
 }
 
 interface ValuesProps {
-    key: string;
     problem: Problem;
 }
 
-function Values({ id, short_name, type, time, language, score, status, link }: Problem) {
+function Values({ problem }: ValuesProps) {
     return (
         <div className="values flex">
-            <p className="problem_no">{id}</p>
-            <a className="problem_name" href={`/problem/${link}`}>{short_name}</a>
-            <p className="problem_type">{type}</p>
-            <p className="problem_time">{time}</p>
-            <p className="problem_language">{language}</p>
-            <p className="problem_score">{score}</p>
-            <p className="problem_status">{status}</p>
+            <p className="problem_no">{problem.id}</p>
+            <Link to={`/problem/${problem.id}`} className="problem_name">
+                {problem.short_name}
+            </Link>
+            <p className="problem_type">{problem.type}</p>
+            <p className="problem_difficulty">{problem.difficulty}</p>
+            <p className="problem_time">{problem.time}</p>
+            <p className="problem_language">{problem.language}</p>
+            <p className="problem_score">{problem.score}</p>
+            <p className="problem_status">{problem.status}</p>
         </div>
     );
 }
 
 export default Values;
+export type { Problem };
