@@ -6,6 +6,10 @@ import Values from "../components/Values";
 function Problems() {
 	const [problems, setProblems] = useState(Object); // Initialize state with null
 	let questions = problems ? Object.keys(problems).length : 0;
+	let hard_questions = problems ? Object.keys(problems).filter((key) => problems[key].difficulty === 'Hard').length : 0;
+	let medium_questions = problems ? Object.keys(problems).filter((key) => problems[key].difficulty === 'Medium').length : 0;
+	let easy_questions = problems ? Object.keys(problems).filter((key) => problems[key].difficulty === 'Easy').length : 0;
+	const [attemptedQuestions, setAttemptedQuestions] = useState(0);
 
     useEffect(() => {
 		const fetchProblems = async () => {
@@ -22,6 +26,30 @@ function Problems() {
 		fetchProblems();
 	}, []);
 
+	const [loggedIn, setLoggedIn] = useState(false);
+
+	useEffect(() => {
+		const unsubscribe = FirebaseInit.auth.onAuthStateChanged((user: any) => {
+			setLoggedIn(!!user);
+		});
+		return () => unsubscribe();
+	}, []);
+
+	useEffect(() => {
+		if (loggedIn) {
+			const fetchUserProblems = async () => {
+				try {
+					const data = await FirebaseInit.getUserProblems();
+					setAttemptedQuestions(Object.keys(data).length);
+				} catch (error) {
+					console.error('Error fetching data:', error);
+				}
+			};
+
+			fetchUserProblems();
+		}
+	}, [loggedIn]);
+
 	useEffect(() => {
 		document.title = 'CoddeQuest | Problems';
 	}, []);
@@ -33,19 +61,19 @@ function Problems() {
 					<p>Total Number of Questions: {questions}</p>
 					<p className="text-[red]">
 						Hard:
-						<span className="text-black ml-1">{questions}</span>
+						<span className="text-black ml-1">{hard_questions}</span>
 					</p>
 					<p className="text-[orange]">
 						Medium:
-						<span className="text-black ml-1">{questions}</span>
+						<span className="text-black ml-1">{medium_questions}</span>
 					</p>
 					<p className="text-[green]">
 						Easy:
-						<span className="text-black ml-1">{questions}</span>
+						<span className="text-black ml-1">{easy_questions}</span>
 					</p>
 				</div>
 				<div className="card flex-1">
-					<p className="">Total Number of Attempted: {questions}</p>
+					<p className="">Total Number of Attempted: {attemptedQuestions}</p>
 				</div>
 			</div>
 			<div className="question-holder">
@@ -73,7 +101,7 @@ function Problems() {
 						{!problems ? (
 							<div>Loading...</div>
 						) : Object.keys(problems).length === 0 ? (
-							<div className="text-2xl h-[100px] w-full flex  justify-center items-center">
+							<div className="text-2xl h-[100px] w-full flex justify-center items-center">
 								<p>No Questions Available!</p>
 							</div>
 						) : null}

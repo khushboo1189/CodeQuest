@@ -4,7 +4,7 @@ import FirebaseInit from "../firebase/FirebaseInit";
 
 function CodePlatform() {
     const url = window.location.href;
-    const lastPart = url.split('/').pop()?.toString();
+    const lastPart = url.split('/').pop()?.toString() || "0";
 
     const [problems, setProblems] = useState(Object);
 
@@ -19,6 +19,41 @@ function CodePlatform() {
         };
 
         fetchProblems();
+    }, []);
+
+    useEffect(() => {
+        const addProblem = async () => {
+            try {
+                const data = await FirebaseInit.getUserProblems();
+                if (data) {
+                    if (!data[lastPart]) {
+                        data[lastPart] = {
+                            id: lastPart,
+                            status: "Attempted",
+                            attempts: 0,
+                        };
+                    }
+                    await FirebaseInit.updateUserProblems(data);
+                } else {
+                    const newData = {
+                        [lastPart]: {
+                            id: lastPart,
+                            status: "Attempted",
+                            attempts: 0,
+                        },
+                    };
+                    await FirebaseInit.updateUserProblems(newData);
+                }                
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+        addProblem();
+    }, [problems]);
+
+
+    useEffect(() => {
+        document.title = `CodeQuest | Problem ${lastPart}`;
     }, []);
 
     return (

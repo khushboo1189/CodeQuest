@@ -1,4 +1,6 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
+import FirebaseInit from "../firebase/FirebaseInit";
 
 interface Problem {
     id: number;
@@ -20,7 +22,26 @@ interface ValuesProps {
     problem: Problem;
 }
 
+
 function Values({ problem }: ValuesProps) {
+    // Fetch the list of attempted problems from Firebase users under user uid in problem_list and display them if attempted or display default "Not Attempted"
+
+    const [status, setStatus] = useState({} as { [key: number]: string });
+    const checkStatus = async () => {
+        const data = await FirebaseInit.getUserProblems();
+        if (data) {
+            const updatedStatus: { [key: number]: string } = {};
+            for (const key in data) {
+                if (data.hasOwnProperty(key)) {
+                    updatedStatus[data[key].id] = data[key].status;
+                }
+            }
+            setStatus(updatedStatus);
+        }
+    };
+    checkStatus();
+
+
     return (
         <div className="values flex">
             <p className="problem_no">{problem.id}</p>
@@ -32,7 +53,9 @@ function Values({ problem }: ValuesProps) {
             <p className="problem_time">{problem.time}</p>
             <p className="problem_language">{problem.language}</p>
             <p className="problem_score">{problem.score}</p>
-            <p className="problem_status">{problem.status}</p>
+            <p className="problem_status">
+            {status[problem.id] ? status[problem.id] : "Not Attempted"}
+            </p>
         </div>
     );
 }

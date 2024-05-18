@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, browserSessionPersistence, setPersistence, onAuthStateChanged, updateProfile } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, browserSessionPersistence, setPersistence, onAuthStateChanged, updateProfile, sendPasswordResetEmail } from "firebase/auth";
 import { get, getDatabase, ref, set } from "firebase/database";
 
 const firebaseConfig = {
@@ -21,7 +21,7 @@ class Firebase {
         const app = initializeApp(firebaseConfig);
         this.auth = getAuth(app);
         this.db = getDatabase(app);
-        this.user = null;
+        this.user = null as any;
         this.initAuthStateListener();
     }
 
@@ -42,7 +42,7 @@ class Firebase {
             await set(dbRef, {
                 email: user.email,
                 name: name,
-                problems: []
+                problems: {}
             });
         } catch (error) {
             console.error('An error occurred during sign up:', error);
@@ -64,7 +64,7 @@ class Firebase {
             } else if (errorCode === 'auth/wrong-password' || errorCode === 'auth/invalid-password') {
                 alert('Wrong password');
             } else if (errorCode === 'auth/invalid-credential') {
-                alert(`Invalid credentials! \n${error_message}`);
+                alert("Invalid credentials!");
             } else if (errorCode === 'auth/too-many-requests') {
                 alert(`Too many requests: You need to reset your password to login again! \n ${error_message}`);
             } else {
@@ -87,9 +87,51 @@ class Firebase {
           }
         } catch (error) {
           console.error(error);
-          throw error; // Rethrow the error to handle it in the caller
+          throw error; 
         }
       }
+
+    async logout() {
+        try {
+            await this.auth.signOut();
+        } catch (error) {
+            console.error('An error occurred during sign out:', error);
+        }
+    }
+
+    async resetPassword(email: string) {
+        try {
+            await sendPasswordResetEmail(this.auth, email);
+        } catch (error) {
+            console.error('An error occurred during password reset:', error);
+        }
+    }
+
+    async getUserProblems() {
+        try {
+            const dbRef = ref(this.db, `users/${this.user.uid}/problems_list`);
+            const snapshot = await get(dbRef);
+            if (snapshot.exists()) {
+                const data = snapshot.val();
+                return data;
+            } else {
+                return null;
+            }
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
+
+    async updateUserProblems(problems: any) {
+        try {
+            const dbRef = ref(this.db, `users/${this.user.uid}/problems_list`);
+            await set(dbRef, problems);
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
       
 }
 
