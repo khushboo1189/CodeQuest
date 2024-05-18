@@ -109,6 +109,9 @@ class Firebase {
 
     async getUserProblems() {
         try {
+            if (!this.user) {
+                return null;
+            }
             const dbRef = ref(this.db, `users/${this.user.uid}/problems_list`);
             const snapshot = await get(dbRef);
             if (snapshot.exists()) {
@@ -125,6 +128,9 @@ class Firebase {
 
     async updateUserProblems(problems: any) {
         try {
+            if (!this.user) {
+                return null;
+            }
             const dbRef = ref(this.db, `users/${this.user.uid}/problems_list`);
             await set(dbRef, problems);
         } catch (error) {
