@@ -19,10 +19,20 @@ function NavLinks({href, name}: NavLinksProps) {
     }
   
     return (
-      <Link to={href} onClick={handleClick} className={location.pathname === href ? "active" : ""}>
+      <Link
+        to={href}
+        onClick={handleClick}
+        className={
+          location.pathname === href ||
+          (name === "Problems" &&
+            location.pathname.startsWith("/problem/")) // Check if pathname starts with "/problem/"
+            ? "active"
+            : ""
+        }
+      >
         <span>{name}</span>
       </Link>
-    )
+    );
 }
 
 export default NavLinks

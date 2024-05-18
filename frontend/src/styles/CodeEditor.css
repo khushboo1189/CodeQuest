@@ -1,3 +1,24 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+.problem-info {
+    box-shadow: 0 0 10px rgba(34, 99, 114, 0.6);
+    padding: clamp(40px, 5%, 80px);
+    font-family: 'Roboto', sans-serif;
+}
+
+.problem-info h1 {
+    font-size: 2.5rem;
+}
+
+.problem-info .description {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+}
+
+.problem-info p {
+    font-size: 1.5rem;
+}
+
 .code-editor {
     border: solid 2px #000;
     padding: 20px;
@@ -9,31 +30,32 @@
 }
 
 .code-editor .action-btn a {
-    padding: 10px 30px;
+    padding: 10px 20px;
     text-align: center;
     text-decoration: none;
     font-size: 18px;
-    border-radius: 20px;
+    border-radius: 5px;
+    transition: all 0.6s ease;
 }
 
 .code-editor .action-btn .run {
     background-color: #4CAF50;
     color: #fff;
-    border: none;
 }
 
 .code-editor .action-btn .run:hover {
     background-color: #45a049;
+    box-shadow: #45a049 0px 0px 2px;
 }
 
 .code-editor .action-btn .submit {
     background-color: #008CBA;
     color: #fff;
-    border: none;
 }
 
 .code-editor .action-btn .submit:hover {
     background-color: #007a9b;
+    box-shadow: #007a9b 0px 0px 2px;
 }
 
 .code-editor .box {
