@@ -6,15 +6,22 @@ import axios from 'axios';
 import { useEffect, useState } from "react";
 import FirebaseInit from "../firebase/FirebaseInit";
 
-function CodeEditor({ input, problem_no, output, input_call }: { input: String, problem_no: String, output: String, input_call: String}) {
+function CodeEditor({ problem, problem_no, output, input_call }: { problem: Object | any, problem_no: String, output: String, input_call: String}) {
 
-    const [Input, setInput] = useState(input);
+    const [Input, setInput] = useState("");
     const [terminalOutput, setTerminalOutput] = useState("Output will be displayed here\n.\n.\n.");
     const [canSubmit, setCanSubmit] = useState(false);
 
     useEffect(() => {
-        setInput(input);
-    }, [Input]);
+        const fetchInput = async () => {
+            let value = await FirebaseInit.getUserSubmittedCode(problem.id) 
+            if (!value) { 
+                value = problem.hasOwnProperty("input_format") ? problem["input_format"] : "def main():\n\treturn 'Hello, World!')" || "";
+            }
+            setInput(value);
+        }
+        fetchInput();
+    }, [problem]);
 
     const runProgram = () => {
         setTerminalOutput("Running program...");
@@ -85,7 +92,7 @@ function CodeEditor({ input, problem_no, output, input_call }: { input: String, 
                     <button className="run" onClick={runProgram}>Run</button>
                     <button className="submit" onClick={submitProgram}>Submit</button>
                 </div>
-                <CodeMirror value={Input.toString()} height='45vh' extensions={[python()]} theme={oneDark} onChange={(e) => setInput(e)} />
+                <CodeMirror value={Input} height='45vh' extensions={[python()]} theme={oneDark} onChange={(e) => setInput(e)} />
                 <div className="box output w-full h-full justify-center items-center bg-black text-white mt-5">
                     <div className="output-title">Output:</div>
                     <div className="output-content">

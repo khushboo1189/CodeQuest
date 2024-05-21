@@ -9,7 +9,10 @@ function Problems() {
 	let hard_questions = problems ? Object.keys(problems).filter((key) => problems[key].difficulty === 'Hard').length : 0;
 	let medium_questions = problems ? Object.keys(problems).filter((key) => problems[key].difficulty === 'Medium').length : 0;
 	let easy_questions = problems ? Object.keys(problems).filter((key) => problems[key].difficulty === 'Easy').length : 0;
+	const [openedQuestions, setopenedQuestions] = useState(0);
 	const [attemptedQuestions, setAttemptedQuestions] = useState(0);
+	const [submittedQuestions, setSubmittedQuestions] = useState(0);
+	const [notAttemptedQuestions, setNotAttemptedQuestions] = useState(0);
 
     useEffect(() => {
 		const fetchProblems = async () => {
@@ -40,7 +43,13 @@ function Problems() {
 			const fetchUserProblems = async () => {
 				try {
 					const data = await FirebaseInit.getUserProblems();
-					setAttemptedQuestions(data ? Object.keys(data).length : 0);
+					setopenedQuestions(data ? Object.keys(data).length : 0);
+					const attempts = await FirebaseInit.getTotalUserAttempts();
+					setAttemptedQuestions(attempts ?? 0);
+					const submits = await FirebaseInit.getTotalSubmittedProblems();
+					setSubmittedQuestions(submits ?? 0);
+					const notAttempted = await FirebaseInit.getUserNotAttemptedProblems();
+					setNotAttemptedQuestions(notAttempted ?? 0);
 				} catch (error) {
 					console.error('Error fetching data:', error);
 				}
@@ -73,7 +82,10 @@ function Problems() {
 					</p>
 				</div>
 				<div className="card flex-1">
-					<p className="">Total Number of Attempted: {attemptedQuestions}</p>
+					<p className="">Total Number of Questions Opened: {openedQuestions}</p>
+					<p className="">Total Number of Questions Attempted: {attemptedQuestions}</p>
+					<p className="">Total Questions Solved: {submittedQuestions}</p>
+					<p className="">Total Not Attempted Questions: {notAttemptedQuestions}</p>
 				</div>
 			</div>
 			<div className="question-holder">

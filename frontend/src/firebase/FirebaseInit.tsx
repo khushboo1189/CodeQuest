@@ -189,13 +189,87 @@ class Firebase {
                 const data = snapshot.val() || 0;
                 return data;
             } else {
-                return null;
+                return 0;
             }
         } catch (error) {
             console.error(error);
             throw error;
         }
     }
+
+    async getTotalUserAttempts() {
+        try {
+            if (!this.user) {
+                return null;
+            }
+            const dbRef = ref(this.db, `users/${this.user.uid}/problems_list`);
+            const snapshot = await get(dbRef);
+            if (snapshot.exists()) {
+                const data = snapshot.val();
+                let total_attempts = 0;
+                for (const key in data) {
+                    total_attempts += data[key].attempts;
+                }
+                return total_attempts;
+            } else {
+                return 0;
+            }
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
+
+    async getTotalSubmittedProblems() {
+        try {
+            if (!this.user) {
+                return null;
+            }
+            const dbRef = ref(this.db, `users/${this.user.uid}/problems_list`);
+            const snapshot = await get(dbRef);
+            if (snapshot.exists()) {
+                const data = snapshot.val();
+                let total_submits = 0;
+                for (const key in data) {
+                    if (data[key].status === 'Submitted!') {
+                        total_submits += 1;
+                    }
+                }
+                return total_submits;
+            } else {
+                return 0;
+            }
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
+    
+    async getUserNotAttemptedProblems() {
+        try {
+            if (!this.user) {
+                return null;
+            }
+            const dbRef = ref(this.db, `users/${this.user.uid}/problems_list`);
+            const snapshot = await get(dbRef);
+            if (snapshot.exists()) {
+                const data = snapshot.val();
+                let not_attempted = 0;
+                for (const key in data) {
+                    if (data[key].attempts === 0) {
+                        not_attempted += 1;
+                    }
+                }
+                return not_attempted;
+            } else {
+                return 0;
+            }
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
+
 }
 
 const FirebaseInit = new Firebase();

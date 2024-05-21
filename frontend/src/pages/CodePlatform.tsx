@@ -7,7 +7,6 @@ function CodePlatform() {
     const lastPart = url.split('/').pop()?.toString() || "0";
 
     const [problems, setProblems] = useState(Object);
-    const [inputCode, setInputCode] = useState("def main():\n\treturn 'Hello, World!')");
     const [outputCode, setOutputCode] = useState("");
     const [inputCall, setInputCall] = useState("main()");
     const [attempts, setAttempts] = useState(0);
@@ -72,16 +71,8 @@ function CodePlatform() {
     }, [problems]);
 
     useEffect(() => {
-        const fetchInput = async () => {
+        const fetchOutput = async () => {
             try {
-                // Fetch input from Firebase if user has submitted code or use default input
-                let input_value = await FirebaseInit.getUserSubmittedCode(lastPart);
-                if (!input_value) {
-                    input_value = problems.hasOwnProperty("pb-"+lastPart) ? problems["pb-"+lastPart].input_format : "";
-                }
-                if (input_value) {
-                    setInputCode(input_value);
-                }
                 // Fetch output from Problems
                 const output_value = problems.hasOwnProperty("pb-"+lastPart) ? problems["pb-"+lastPart].output : "";
                 if (output_value) {
@@ -96,7 +87,7 @@ function CodePlatform() {
                 console.error('Error fetching data:', error);
             }
         }
-        fetchInput();
+        fetchOutput();
     }, [problems]);
 
 
@@ -130,7 +121,7 @@ function CodePlatform() {
                     Object.keys(problems).map((key) => {
                         const problem = problems[key];
                         return String(problem.id) === lastPart && (
-                            <CodeEditor key={key} input={inputCode} problem_no={lastPart} output={outputCode} input_call={inputCall} />
+                            <CodeEditor key={key} problem={problems["pb-"+lastPart]} problem_no={lastPart} output={outputCode} input_call={inputCall} />
                         )
                     })
                 ) : (
