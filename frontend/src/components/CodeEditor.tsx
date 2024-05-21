@@ -1,25 +1,95 @@
 import "../styles/CodeEditor.css"
-import CodingTextArea from "./CodingTextArea";
+import "../styles/CodingTextArea.css";
+import CodeMirror, { oneDark } from '@uiw/react-codemirror';
+import { python } from '@codemirror/lang-python';
+import axios from 'axios';
+import { useEffect, useState } from "react";
+import FirebaseInit from "../firebase/FirebaseInit";
 
-function CodeEditor({ input }: { input: String }) {
+function CodeEditor({ input, problem_no, output, input_call }: { input: String, problem_no: String, output: String, input_call: String}) {
+
+    const [Input, setInput] = useState(input);
+    const [terminalOutput, setTerminalOutput] = useState("Output will be displayed here\n.\n.\n.");
+    const [canSubmit, setCanSubmit] = useState(false);
+
+    useEffect(() => {
+        setInput(input);
+    }, [Input]);
+
+    const runProgram = () => {
+        setTerminalOutput("Running program...");
+
+        setTimeout(() => {
+            axios.post('https://codde-quest-backend.vercel.app/compile', {
+                code: {
+                    code: Input.toString(),
+                    call: input_call
+                }
+            }).then((response) => {
+                FirebaseInit.updateUserAttempts(problem_no);
+                if (response.data.error) {
+                    setTerminalOutput(response.data.error)
+                } else {
+                    const match = response.data.output.replace("\n", "") === output;
+                    setTerminalOutput(response.data.output + (match ? "\n(!) Matches expected output (!)" : "\n(!) Does not match expected output (!)\nExpected output: " + output ));
+                    if (match) {
+                        alert("Correct answer! You can now submit the program.");
+                        setCanSubmit(true);
+                    }
+                }
+            }).catch((error) => {
+                if (error.response) {
+                    setTerminalOutput(error.response.data.error)
+                } else {
+                    setTerminalOutput("An error occurred")
+                }
+            });
+        }, 1000);
+    }
+
+    const submitProgram = () => {
+        if (canSubmit) {
+            setTerminalOutput("Submitting program...");
+
+            const user_uid = FirebaseInit.auth.currentUser?.uid.toString() || "null";
+
+            axios.post('https://codde-quest-backend.vercel.app/submit', {
+                submit_info: {
+                    problem_no: problem_no,
+                    user_uid: user_uid,
+                    code: Input.toString()
+                }
+            }).then((response) => {
+                if (response.data.error) {
+                    setTerminalOutput(response.data.error)
+                } else {
+                    alert("Submitted successfully!");
+                    window.location.href = "/problem";
+                }
+            }).catch((error) => {
+                if (error.response) {
+                    setTerminalOutput(error.response.data.error)
+                } else {
+                    setTerminalOutput("An error occurred")
+                }
+            });
+        } else {
+            setTerminalOutput("You need to run the program before submitting!")
+        }
+    }
+
     return (
-        <div className="h-full w-full max-h-full">
-            <div className="code-editor flex flex-col h-full w-full max-h-full">
+        <div className="h-full w-full flex">
+            <div className="code-editor flex flex-col h-full w-full">
                 <div className="action-btn flex-none flex justify-center">
-                    <a className="run">Run</a>
-                    <a className="submit">Submit</a>
+                    <button className="run" onClick={runProgram}>Run</button>
+                    <button className="submit" onClick={submitProgram}>Submit</button>
                 </div>
-                <div className="boxes flex-auto flex flex-col h-full w-full gap-[75px] max-h-full">
-                    <div className="coding-box flex-auto w-full h-full justify-center items-center">
-                        <CodingTextArea input_field={String(input)} />
-                    </div>
-                    <div className="box output flex-none w-full h-full justify-center items-center bg-black text-white">
-                        <div className="output-title">Output:</div>
-                        <div className="output-content">
-                            <div className="output-text">Output will be displayed here</div>
-                            <div className="output-text">.</div>
-                            <div className="output-text">.</div>
-                        </div>
+                <CodeMirror value={Input.toString()} height='45vh' extensions={[python()]} theme={oneDark} onChange={(e) => setInput(e)} />
+                <div className="box output w-full h-full justify-center items-center bg-black text-white mt-5">
+                    <div className="output-title">Output:</div>
+                    <div className="output-content">
+                        <div className="output-text">{terminalOutput.split('\n').map((line, index) => <p key={index}>{line}</p>)}</div>
                     </div>
                 </div>
             </div>

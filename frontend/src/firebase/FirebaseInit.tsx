@@ -138,7 +138,64 @@ class Firebase {
             throw error;
         }
     }
-      
+
+    async getUserSubmittedCode(problem_no: string) {
+        try {
+            if (!this.user) {
+                return null;
+            }
+            const dbRef = ref(this.db, `users/${this.user.uid}/problems/${problem_no}/input`);
+            const snapshot = await get(dbRef);
+            if (snapshot.exists()) {
+                const data = snapshot.val();
+                return data;
+            } else {
+                return null;
+            }
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
+
+    async updateUserAttempts(problem_no: String) {
+        try {
+            if (!this.user) {
+                return null;
+            }
+            const dbRef = ref(this.db, `users/${this.user.uid}/problems_list/${problem_no}/attempts`);
+            const snapshot = await get(dbRef);
+            if (snapshot.exists()) {
+                const previousAttempts = snapshot.val() || 0;
+                const newAttempts = previousAttempts + 1;
+                await set(dbRef, newAttempts);
+            } else {
+                await set(dbRef, 0 ); 
+            }
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
+
+    async currentAttempts(problem_no: String) {
+        try {
+            if (!this.user) {
+                return null;
+            }
+            const dbRef = ref(this.db, `users/${this.user.uid}/problems_list/${problem_no}/attempts`);
+            const snapshot = await get(dbRef);
+            if (snapshot.exists()) {
+                const data = snapshot.val() || 0;
+                return data;
+            } else {
+                return null;
+            }
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
 }
 
 const FirebaseInit = new Firebase();

@@ -37,6 +37,27 @@ function Authentication() {
         }
     }
 
+    const handleRegister = async () => {
+        if (email !== '' && password !== '' && username !== '' && password.length >= 6) {
+            try {
+                await FirebaseInit.registerUser(email, password, username);
+                navigate('/');
+            } catch (error) {
+                console.error('An error occurred during sign in:', error);
+            }
+        } else if (password.length < 6) {
+            alert('Password must be at least 6 characters long');
+        } else {
+            if (email === '' && password === '') {
+                alert('Email and password are required');
+            } else if (email === '') {
+                alert('Email is required');
+            } else if (password === '') {
+                alert('Password is required');
+            }
+        }
+    }
+
     const toggleMode = () => {
         setIsRegistering(prevState => !prevState);
     }
@@ -70,7 +91,7 @@ function Authentication() {
                     </div>
                 </div>
                 <Link className="text-[grey] mt-2 underline" to="/forgot-password">Forgot Password?</Link>
-                <button className="button btn mt-12" onClick={handleLogin}>{isRegistering ? 'Register' : 'Login'}</button>
+                <button className="button btn mt-12" onClick={isRegistering ? handleRegister : handleLogin}>{isRegistering ? 'Register' : 'Login'}</button>
 
                 {isRegistering ? <p className="mt-5 text-[18px]">Account Already Exists?<Link className="text-[grey] ml-1 underline" to="/authentication" onClick={toggleMode}>Login</Link></p> : <p className="mt-5 text-[18px]">New to CodeQuest?<Link className="text-[grey] ml-1 underline" to="/authentication" onClick={toggleMode}>Register</Link></p>}
             </div>

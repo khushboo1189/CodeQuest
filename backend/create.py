@@ -2,8 +2,63 @@ import json
 import pyrebase
 import datetime
 
+def menu():
+    print("Select an operation:")
+    print("1. Upload a single problem")
+    print("2. Upload all problems from the data.json file")
+    print("3. Upload series of problems")
+    print("4. Exit")
+    choice = int(input("Enter your choice: "))
+    if choice == 1:
+        id = input("Enter the problem ID: ")
+        short_name = input("Enter the problem short name: ")
+        type = input("Enter the problem type: ")
+        difficulty = input("Enter the problem difficulty: ")
+        time = input("Enter the problem time: ")
+        language = input("Enter the problem language: ")
+        score = input("Enter the problem score: ")
+        status = input("Enter the problem status: ")
+        description = input("Enter the problem description: ")
+        input_format = input("Enter the problem input format: ")
+        output_format = input("Enter the problem output format: ")
+        output = input("Enter the problem output: ")
+        pb_input = input("Enter the problem input: ")
+        pb = Problem(id, short_name, type, difficulty, time, language, score, status, description, input_format, output_format, output, pb_input)
+        pb.clean()
+        pb.prints()
+        pb.upload()
+    elif choice == 2:
+        pb = Problem()
+        pb.upload_all()
+    elif choice == 3:
+        print("Enter the series of problems:")
+        series = int(input("Enter the number of problems: "))
+        for i in range(series):
+            id = input("Enter the problem ID: ")
+            short_name = input("Enter the problem short name: ")
+            type = input("Enter the problem type: ")
+            difficulty = input("Enter the problem difficulty: ")
+            time = input("Enter the problem time: ")
+            language = input("Enter the problem language: ")
+            score = input("Enter the problem score: ")
+            status = input("Enter the problem status: ")
+            description = input("Enter the problem description: ")
+            input_format = input("Enter the problem input format: ")
+            output_format = input("Enter the problem output format: ")
+            output = input("Enter the problem output: ")
+            pb_input = input("Enter the problem input: ")
+            pb = Problem(id, short_name, type, difficulty, time, language, score, status, description, input_format, output_format, output, pb_input)
+            pb.clean()
+            pb.prints()
+            pb.upload()
+    elif choice == 4:
+        print("Exiting...")
+    else:
+        print("Invalid choice\n\n")
+        menu()
+
 class Problem:
-    def __init__(self, id = None, short_name = None, type = None, difficulty = None, time = None, language = None, score = None, status = None, description = None, input_format = None, output_format = None, output = None, input = None):
+    def __init__(self, id = None, short_name = None, type = None, difficulty = None, time = None, language = None, score = None, status = None, description = None, input_format = None, output_format = None, output = None, pb_input = None):
         self.id = id
         self.short_name = short_name
         self.type = type
@@ -16,7 +71,7 @@ class Problem:
         self.input_format = input_format
         self.output_format = output_format
         self.output = output
-        self.input = input
+        self.pb_input = pb_input
         self.created_on = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         self.db = self.init_db()
     
@@ -34,7 +89,7 @@ class Problem:
         f"Input Format: {self.input_format}\n"
         f"Output Format: {self.output_format}\n"
         f"Output: {self.output}\n"
-        f"Input: {self.input}\n"
+        f"Input: {self.pb_input}\n"
         f"Created On: {self.created_on}\n")
         
     def clean(self):
@@ -65,7 +120,7 @@ class Problem:
             return "Problem output format is empty", self
         if self.output in ["", None]:
             return "Problem output is empty", self
-        if self.input in ["", None]:
+        if self.pb_input in ["", None]:
             return "Problem input is empty", self
         return self
     
@@ -103,7 +158,7 @@ class Problem:
             "input_format": self.input_format,
             "output_format": self.output_format,
             "output": self.output,
-            "input": self.input
+            "input": self.pb_input
         }
         
     def upload(self):
@@ -123,6 +178,4 @@ class Problem:
             pb.upload()
             
 if __name__ == "__main__":
-    pb = Problem()
-    pb.upload_all()
-    
+    menu()

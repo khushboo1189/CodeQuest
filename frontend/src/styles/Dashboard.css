@@ -1,0 +1,36 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
+
+.profile-section {
+    font-family: 'DM Sans', sans-serif;
+}
+
+.profile-section svg {
+    height: clamp(50px, 10vw, 200px);
+}
+
+.profile-section p.username {
+    font-size: clamp(1.5rem, 2vw, 2rem);
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.profile-section p.email {
+    font-size: clamp(1rem, 1.5vw, 1.5rem);
+    margin-top: 5px;
+}
+
+.profile-section button.logout-btn {
+    font-size: clamp(1rem, 1.5vw, 1.5rem);
+    margin-top: 20px;
+    padding: 10px 20px;
+    border-radius: 5px;
+    background-color: red;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: all 0.6s;
+}
+
+.profile-section button.logout-btn:hover {
+    box-shadow: 0 0 10px red;
+}

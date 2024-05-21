@@ -29,7 +29,8 @@
     gap: 40px;
 }
 
-.code-editor .action-btn a {
+.code-editor .action-btn button {
+    font-family: 'Roboto', sans-serif;
     padding: 10px 20px;
     text-align: center;
     text-decoration: none;
@@ -44,8 +45,8 @@
 }
 
 .code-editor .action-btn .run:hover {
-    background-color: #45a049;
-    box-shadow: #45a049 0px 0px 2px;
+    box-shadow: #4CAF50 0px 0px 5px;
+    cursor: pointer;
 }
 
 .code-editor .action-btn .submit {
@@ -54,13 +55,12 @@
 }
 
 .code-editor .action-btn .submit:hover {
-    background-color: #007a9b;
-    box-shadow: #007a9b 0px 0px 2px;
+    box-shadow: #008CBA 0px 0px 5px;
+    cursor: pointer;
 }
 
 .code-editor .box {
     border: #000 solid 5px;
-    resize: none;
 }
 
 .code-editor .coding {

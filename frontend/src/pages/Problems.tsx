@@ -40,7 +40,7 @@ function Problems() {
 			const fetchUserProblems = async () => {
 				try {
 					const data = await FirebaseInit.getUserProblems();
-					setAttemptedQuestions(Object.keys(data).length);
+					setAttemptedQuestions(data ? Object.keys(data).length : 0);
 				} catch (error) {
 					console.error('Error fetching data:', error);
 				}

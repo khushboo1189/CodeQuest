@@ -7,6 +7,23 @@ function CodePlatform() {
     const lastPart = url.split('/').pop()?.toString() || "0";
 
     const [problems, setProblems] = useState(Object);
+    const [inputCode, setInputCode] = useState("def main():\n\treturn 'Hello, World!')");
+    const [outputCode, setOutputCode] = useState("");
+    const [inputCall, setInputCall] = useState("main()");
+    const [attempts, setAttempts] = useState(0);
+
+    useEffect(() => {
+        const fetchAttempts = async () => {
+            try {
+                const data = await FirebaseInit.currentAttempts(lastPart);
+                setAttempts(data);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+
+        fetchAttempts();
+    }, []);
 
     useEffect(() => {
         const fetchProblems = async () => {
@@ -25,20 +42,23 @@ function CodePlatform() {
         const addProblem = async () => {
             try {
                 const data = await FirebaseInit.getUserProblems();
+                const currentAttempts = await FirebaseInit.currentAttempts(lastPart);
                 if (data) {
+                    // If problem exists, update status
                     if (!data[lastPart]) {
                         data[lastPart] = {
                             id: lastPart,
-                            status: "Attempted",
+                            status: currentAttempts > 0 ? "Attempted" : "Opened",
                             attempts: 0,
                         };
                     }
                     await FirebaseInit.updateUserProblems(data);
                 } else {
+                    // If problem does not exist, add problem
                     const newData = {
                         [lastPart]: {
                             id: lastPart,
-                            status: "Attempted",
+                            status: "Opened",
                             attempts: 0,
                         },
                     };
@@ -49,6 +69,34 @@ function CodePlatform() {
             }
         };
         addProblem();
+    }, [problems]);
+
+    useEffect(() => {
+        const fetchInput = async () => {
+            try {
+                // Fetch input from Firebase if user has submitted code or use default input
+                let input_value = await FirebaseInit.getUserSubmittedCode(lastPart);
+                if (!input_value) {
+                    input_value = problems.hasOwnProperty("pb-"+lastPart) ? problems["pb-"+lastPart].input_format : "";
+                }
+                if (input_value) {
+                    setInputCode(input_value);
+                }
+                // Fetch output from Problems
+                const output_value = problems.hasOwnProperty("pb-"+lastPart) ? problems["pb-"+lastPart].output : "";
+                if (output_value) {
+                    setOutputCode(output_value);
+                }
+                // Fetch input call from Firebase if user has submitted code or use default input call
+                let input_call = problems.hasOwnProperty("pb-"+lastPart) ? problems["pb-"+lastPart].output_format : "";
+                if (input_call) {
+                    setInputCall(input_call);
+                }
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        }
+        fetchInput();
     }, [problems]);
 
 
@@ -67,8 +115,9 @@ function CodePlatform() {
                                 <h1>{problem.short_name}</h1>
                                 <p className="description">{problem.description}</p>
                                 <p>Difficulty: {problem.difficulty}</p>
-                                <p>Example Input: {problem.input}</p>
+                                <p>Example Input: {problem.output_format}</p>
                                 <p>Example Output: {problem.output}</p>
+                                <p>Current Attempts: {attempts}</p>
                             </div>
                         )
                     })
@@ -76,12 +125,12 @@ function CodePlatform() {
                     <div>Loading...</div>
                 )}
             </div>
-            <div className="flex-1 h-full w-full sm:hidden">
+            <div className="flex-1 h-[calc(100vh-130px)] w-full sm:hidden">
                 {problems ? (
                     Object.keys(problems).map((key) => {
                         const problem = problems[key];
                         return String(problem.id) === lastPart && (
-                            <CodeEditor key={key} input={problem.input_format || "def main():\n"} />
+                            <CodeEditor key={key} input={inputCode} problem_no={lastPart} output={outputCode} input_call={inputCall} />
                         )
                     })
                 ) : (
