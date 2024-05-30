@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 import GithubLogo from '/github_logo.png';
 import LinkedinLogo from '/LinkedIn_logo.png';
+import KaranPhoto from "/Karan_Photo.png";
 import khushbooPhoto from '/Khushboo.jpg';
-import gautamPhoto from '/Gautam.jpg';
 import '../styles/About.css';
 
 function About() {
@@ -19,22 +19,22 @@ function About() {
 					<p className="mt-8 content-2 text-center">If you have any questions or feedback, please feel free to contact us at <a href="mailto:khushbookamra8@gmail.com"> khushbookamra8@gmail.com </a></p>
 				</div>
 				<div className="card-holders flex p-5 sm:flex-col h-full mt-16">
+				<div className="card flex flex-col justify-center items-center sm:w-full sm:mt-10">
+						<img src={KaranPhoto} alt="Khushboo Kamra" />
+						<p className="text-center name">Karan Arora</p>
+						<p className="text-center info">Web Developer</p>
+						<div className="links flex flex-wrap">
+							<a href="https://github.com/arorakaran19" target="_blank" rel="noreferrer"> <img src={GithubLogo} alt="Github Logo" /> </a>
+							<a href="https://www.linkedin.com/in/arorakaran19/" target="_blank" rel="noreferrer"> <img src={LinkedinLogo} alt="Linkedin Logo" /> </a>
+						</div>
+					</div>
 					<div className="card flex flex-col justify-center items-center sm:w-full sm:mt-10">
 						<img src={khushbooPhoto} alt="Khushboo Kamra" />
 						<p className="text-center name">Khushboo Kamra</p>
 						<p className="text-center info">Web Developer</p>
 						<div className="links flex flex-wrap">
 							<a href="https://github.com/khushboo1189" target="_blank" rel="noreferrer"> <img src={GithubLogo} alt="Github Logo" /> </a>
-							<a href="https://github.com/khushboo1189" target="_blank" rel="noreferrer"> <img src={LinkedinLogo} alt="Linkedin Logo" /> </a>
-						</div>
-					</div>
-					<div className="card flex flex-col justify-center items-center sm:w-full sm:mt-10 mb-10">
-						<img src={gautamPhoto} alt="Gautam Aggarwal" />
-						<p className="text-center name">Gautam Aggarwal</p>
-						<p className="text-center info">UI/UX Designer</p>
-						<div className="links flex flex-wrap">
-							<a href="https://github.com/" target="_blank" rel="noreferrer"> <img src={GithubLogo} alt="Github Logo" /> </a>
-							<a href="https://www.linkedin.com/in/agga-gautam/" target="_blank" rel="noreferrer"> <img src={LinkedinLogo} alt="Linkedin Logo" /> </a>
+							<a href="https://www.linkedin.com/in/khushboo1189/" target="_blank" rel="noreferrer"> <img src={LinkedinLogo} alt="Linkedin Logo" /> </a>
 						</div>
 					</div>
 				</div>
