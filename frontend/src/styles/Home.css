@@ -1,65 +1,72 @@
 @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap');
 
-.content::before {
+.home-page::before {
     content: "";
     background-image: url('../assets/Logo.jpg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    opacity: 0.2; /* Change this to the opacity you want */
+    opacity: 0.2;
+    /* Change this to the opacity you want */
     top: 0;
     left: 0;
     bottom: 0;
     right: 0;
     position: absolute;
-    z-index: -1;   
+    z-index: -1;
 }
 
-.content .head-1 {
-    font-size: clamp(2em, 5vw, 3em);
+.home-page .hero-section .hero-section-content .hero-section-title {
+    font-family: 'Oswald', sans-serif;
+    font-size: clamp(2rem, 5vw, 3.5rem);
     line-height: 1;
-    font-family: 'Oswald', sans-serif;
 }
 
-.content .head-2 {
-    font-size: clamp(4rem, 5vw, 6rem);
+.home-page .hero-section .hero-section-content .hero-section-name {
+    font-family: 'Oswald', sans-serif;
+    font-size: clamp(2.5rem, 5vw, 5rem);
+    margin-bottom: 1rem;
     line-height: 1;
+}
+
+.home-page .hero-section .hero-section-content .hero-section-description {
     font-family: 'Oswald', sans-serif;
+    font-size: clamp(1rem, 5vw, 2rem);
+    font-weight: 300;
+    margin-bottom: 1rem;
+    line-height: 1;
 }
 
-.content .head-3 {
-    font-size: clamp(1.5rem, 5vw, 2rem);
-    line-height: 2;
+.home-page .hero-section .get-started-btn {
+    padding: clamp(0.5rem, 5vw, 1rem) clamp(1rem, 5vw, 2rem);
+    border: #112226 1px solid;
+    transition: all 0.5s ease;
 }
 
+.home-page .hero-section .get-started-btn:hover {
+    background-color: #f9f9f9;
+    border: #000 1px solid;
+    transition: all 0.5s ease-in-out;
+    gap: 1rem;
 
-/* NotFound.tsx */
+    span {
+        color: #000;
+    }
 
-.found {
+    .arrow-svg svg {
+        stroke: black;
+    }
+}
+
+.home-page .hero-section .get-started-btn span {
     font-family: 'Oswald', sans-serif;
-    font-size: 1.5em;
-    color: #000;
-    margin-top: 1em;
+    font-size: clamp(1rem, 5vw, 1.2rem);
+    line-height: normal;
+    color: #f9f9f9;
 }
 
-.found a {
-    color: #000;
-    text-decoration: none;
-}
-
-.found a::after {
-    content: '';
-    width: 0;
-    height: 3px;
-    display: block;
-    background: #000;
-    transition: width .6s;
-}
-
-.found a:hover {
-    color: #000;
-}
-
-.found a:hover::after {
-    width: 100%;
+.home-page .hero-section .get-started-btn .arrow-svg svg {
+    stroke: #f9f9f9;
+    height: clamp(1rem, 5vw, 1.2rem);
+    transition: all 0.5s ease;
 }

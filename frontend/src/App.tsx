@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Home from './pages/Home';
-import Problems from './pages/Problems';
-import Navbar from './components/Navbar';
+import Home from './pages/Homepage/Home';
+import Problems from './pages/Problem/Problems';
+import Navbar from './components/Navbar/Navbar';
 import About from './pages/About';
 import Authentication from './pages/Authentication';
 import NotFound from './pages/NotFound';
@@ -25,18 +25,16 @@ export default function App() {
 	return (
 		<Router>
 			<Navbar />
-			<div>
-				<Routes>
-					<Route path="/" element={<Home />} />
-					<Route path="/problem" element={<Problems />} />
-					<Route path="/about" element={<About />} />
-					{!loggedIn && <Route path="/authentication" element={<Authentication />} />}
-					{!loggedIn && <Route path="/forgot-password" element={<ForgotPassword />} />}
-					{loggedIn && <Route path="/dashboard" element={<Dashboard />} />}
-					{loggedIn ? <Route path="/problem/*" element={<CodePlatform />} /> : <Route path="/problem/*" element={<SignUpError />} />}
-					<Route path="/*" element={<NotFound />} />
-				</Routes>
-			</div>
+			<Routes>
+				<Route path="/" element={<Home />} />
+				<Route path="/problem" element={<Problems />} />
+				<Route path="/about" element={<About />} />
+				{!loggedIn && <Route path="/authentication" element={<Authentication />} />}
+				{!loggedIn && <Route path="/forgot-password" element={<ForgotPassword />} />}
+				{loggedIn && <Route path="/dashboard" element={<Dashboard />} />}
+				{loggedIn ? <Route path="/problem/*" element={<CodePlatform />} /> : <Route path="/problem/*" element={<SignUpError />} />}
+				<Route path="/*" element={<NotFound />} />
+			</Routes>
 		</Router>
 	);
 };
